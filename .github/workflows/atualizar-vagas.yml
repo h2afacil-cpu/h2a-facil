@@ -1,0 +1,18 @@
+name: Atualizar vagas
+on:
+  schedule:
+    - cron: '17 8 * * *'   # 08:17 UTC = 05:17 no horário de Brasília
+  workflow_dispatch:        # permite rodar na mão
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests pandas numpy geonamescache pgeocode
+      - run: python robo_vagas.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
